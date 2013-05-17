@@ -1,0 +1,11 @@
+extend layout
+
+
+block content
+	form(action='/upload', method='POST')
+		h2
+			| Insert JSON here
+		textarea(rows='30', cols='100', name='jsonValue')
+		br
+		input(type='submit', value='Upload')
+block sidebar

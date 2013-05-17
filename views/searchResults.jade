@@ -1,0 +1,25 @@
+extend layout
+
+
+block content
+	if body.rows
+		h4
+				| Search Results
+		each value in body.rows
+			br
+			br
+			div#articleHeading
+				h4
+					| #{value.value.Headline}
+			br
+			br
+			div#articleBody 
+				!=value.value['Article Body']
+	else
+		div
+			=JSON.stringify(body)
+
+	div
+		a(href='/search')
+			| Click here to search again 
+block sidebar

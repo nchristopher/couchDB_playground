@@ -1,0 +1,14 @@
+!!!5
+html
+  head
+    title #{title} - Search Site
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='http://code.jquery.com/jquery-latest.js')
+  body
+    header
+      h1 #{siteName}
+    .container
+      .main-content
+        block content
+    footer
+      p Running on node with Express, Jade and Stylus

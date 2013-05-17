@@ -1,0 +1,11 @@
+extend layout
+
+
+block content
+	form(action='/search', method='POST')
+		h2
+			| Enter Search Keywords here 
+		input(type='text', name='jsonValue')
+		br
+		input(type='submit', value='Search')
+block sidebar
