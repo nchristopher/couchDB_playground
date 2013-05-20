@@ -79,31 +79,33 @@ exports.searchPage = function (req, res) {
 };
 
 exports.upload = function (req, res) {
-    console.log(req);
+    console.log(req.body.jsonValue);
+    var jsonObject = JSON.parse(req.body.jsonValue);
     request({
-        uri: "http://nimil.iriscouch.com/couch_db_first/_bulk_docs",
+        uri: "http://localhost:9200/niarticle/articles/" + jsonObject["Record ID"],
         method: "POST",
         headers: {
             'content-type': 'application/json'
         },
         body: req.body.jsonValue
     }, function (error, response, body) {
-        console.log('Nimil : ' + response);
-        res.send(response);
+        console.log('Nimil : ' + JSON.stringify(response));
+        if(response.statusCode === 200 || response.statusCode === 201 || response.statusCode === 202)
+            res.send("Created");
+        else
+            res.send("Some Problem in uploading, check Logs!");
     });
 };
 exports.search = function (req, res) {
     console.log(req);
-    console.log('Map Function : ' + JSON.stringify({"map": "function (doc) {if (doc.Headline.search(/" + req.body.jsonValue + "/i) !== -1 ) {emit(doc.Headline, doc);}}"}));
+    console.log('Map Function : ' + JSON.stringify({"map": "function (doc){if ('Headline' in doc){if(doc['Article Body'].search(/" + req.body.jsonValue  + "/i) !== -1 || doc.Headline.search(/" + req.body.jsonValue + "/i) !== -1){var key = doc.Headline,value = doc;emit(key,value);}}}"}));
     request({
-        uri: "http://christopher:christopher@nimil.iriscouch.com/couch_db_first/_temp_view",
+        uri: "http://localhost:9200/niarticle/_search?pretty=true",
         method: "POST",
         headers: {
             "content-type": "application/json"
         },
-        body: JSON.stringify({
-            "map": "function (doc) {if (doc.Headline.search(/" + req.body.jsonValue + "/i) !== -1 ) {emit(doc.Headline, doc);}}"
-        })
+        body: JSON.stringify({"sort": [ {"Published Date": { "order": "desc"}}],"query": {"match": {"_all": req.body.jsonValue}}})
     }, function (error, response, body) {
         jsonObject = JSON.parse(response.body);
         console.log('Nimil : ' + response.body);

@@ -2,19 +2,19 @@ extend layout
 
 
 block content
-	if body.rows
+	if body.hits
 		h4
 				| Search Results
-		each value in body.rows
+		each value in body.hits.hits
 			br
 			br
 			div#articleHeading
 				h4
-					| #{value.value.Headline}
+					| #{value._source.Headline}
 			br
 			br
 			div#articleBody 
-				!=value.value['Article Body']
+				!=value._source['Article Body']
 	else
 		div
 			=JSON.stringify(body)
